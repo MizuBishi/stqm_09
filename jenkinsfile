@@ -3,22 +3,17 @@ pipeline {
   stages {
     stage('One') {
       steps {
-        echo 'Hi, this is MiZu'
+        echo 'Hi, this is Step 1'
       }
     }
     stage('Two') {
       steps {
-        input('Do you want to proceed?')
+        echo 'Hi, this is Step 2'
       }
     }
     stage('Three') {
-      when {
-        not {
-          branch "master"
-        }
-      }
       steps {
-        echo "Hello"
+        echo "Hi, this is Step 3"
       }
     }
   }
