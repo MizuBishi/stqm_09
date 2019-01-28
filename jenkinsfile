@@ -1,34 +1,29 @@
 pipeline {
   agent any
+  tools {
+    maven 'Maven 3.6'
+  }
   stages {
-    stage('One') {
+    stage('Checkout') {
       steps {
-        echo 'Hi, this is Step 1'
+        sh 'mvn clean'
       }
     }
-    stage('Two') {
+    stage('Build') {
       steps {
-        echo 'Hi, this is Step 2'
+        sh 'mvn package'
       }
     }
-    stage('Three') {
+    stage('Deploy') {
       steps {
-        echo "Hi, this is Step 3"
+        sh 'mkdir -p /var/jenkins_home/download'
+        sh 'cp ./target/*.jar /var/jenkins_home/download'
       }
     }
-    stage('four') {
-      parallel {
-        stage('Unit Test') {
-          steps {
-            echo "Running the Unit Tests..."
-          }
-        }
-        stage('Integration Test') {
-          steps {
-            echo "Running the Integration Tests"
-          }
-        }
-      }
+  }
+  post {
+    always {
+      junit 'target/surfire-reports/*.xml'
     }
   }
 }
